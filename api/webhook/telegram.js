@@ -52,7 +52,7 @@ try {
     // We don't need this again in production
     bot.launch();
   } else {
-    const hookEndpoint = `${process.env.VERCEL_URL}${webhookEndpoint}`;
+    const hookEndpoint = `https://${process.env.VERCEL_URL}${webhookEndpoint}`;
     console.info(`Setting Telegram webhook to ${hookEndpoint}`);
     bot.telegram.setWebhook(hookEndpoint);
   }
