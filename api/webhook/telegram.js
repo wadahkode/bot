@@ -53,7 +53,9 @@ try {
     bot.launch();
   } else {
     const hookEndpoint = `https://${process.env.VERCEL_URL}${webhookEndpoint}`;
-    console.info(`Setting Telegram webhook to ${hookEndpoint}`);
+
+    console.log(`Setting Telegram webhook to ${hookEndpoint}`);
+
     bot.telegram.setWebhook(hookEndpoint);
   }
 } catch (error) {
