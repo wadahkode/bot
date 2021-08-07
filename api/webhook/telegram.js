@@ -4,16 +4,16 @@ import { Telegraf } from 'telegraf';
 import dotenv from 'dotenv';
 import redis from 'redis';
 
-import logger from './utlis/logger.js';
-import * as poll from './services/poll.js';
-import * as meme from './services/meme.js';
-import * as time from './services/time.js';
-import * as help from './services/help.js';
-import * as quote from './services/quote.js';
-import * as covid from './services/covid.js';
-import * as snap from './services/snap.js';
-import * as blidingej from './services/bliding-ej.js';
-import * as evalBot from './services/eval.js';
+import logger from '../../src/utlis/logger.js';
+import * as poll from '../../src/services/poll.js';
+import * as meme from '../../src/services/meme.js';
+import * as time from '../../src/services/time.js';
+import * as help from '../../src/services/help.js';
+import * as quote from '../../src/services/quote.js';
+import * as covid from '../../src/services/covid.js';
+import * as snap from '../../src/services/snap.js';
+import * as blidingej from '../../src/services/bliding-ej.js';
+import * as evalBot from '../../src/services/eval.js';
 
 const envPath = resolve(dirname(fileURLToPath(import.meta.url)), '../.env');
 dotenv.config({ path: envPath });
