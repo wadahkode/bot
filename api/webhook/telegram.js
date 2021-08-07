@@ -1,7 +1,5 @@
-import { dirname, resolve } from 'path';
-import { fileURLToPath } from 'url';
+import 'dotenv/config';
 import { Telegraf } from 'telegraf';
-import dotenv from 'dotenv';
 import redis from 'redis';
 
 // import logger from '../../src/utlis/logger.js';
@@ -15,47 +13,55 @@ import * as snap from '../../src/services/snap.js';
 import * as blidingej from '../../src/services/bliding-ej.js';
 import * as evalBot from '../../src/services/eval.js';
 
-const envPath = resolve(dirname(fileURLToPath(import.meta.url)), '../.env');
-dotenv.config({ path: envPath });
-
-const bot = new Telegraf(process.env.BOT_TOKEN);
-const cache = redis.createClient(String(process.env.REDIS_URL));
-
-// Handle bot error globally
-// Register it first before register any other commands
-bot.catch((err) => {
-  // TODO: Format the error
-  console.error(err);
-
-  // We doesn't need sentry again.
-  // logger.captureException(err);
-});
-
-const commands = [
-  meme.register(bot),
-  time.register(bot),
-  help.register(bot),
-  quote.register(bot),
-  covid.register(bot, cache),
-  poll.register(cache, bot),
-  snap.register(bot),
-  blidingej.register(bot),
-  evalBot.register(bot),
-]
-  .filter((v) => Array.isArray(v))
-  .flat();
-
-bot.telegram.setMyCommands(commands);
-
-// TODO: Handle command not found
+console.info('Function start');
 
 const webhookEndpoint = '/api/webhook/telegram';
 
-if (process.env.NODE_ENV === 'development') {
-  // We don't need this again in production
-  bot.launch();
-} else {
-  bot.telegram.setWebhook(`${process.env.VERCEL_URL}${webhookEndpoint}`);
+const bot = new Telegraf(process.env.BOT_TOKEN);
+
+try {
+  const cache = redis.createClient(String(process.env.REDIS_URL));
+
+  // Handle bot error globally
+  // Register it first before register any other commands
+  bot.catch((err) => {
+    // TODO: Format the error
+    console.error(err);
+
+    // We doesn't need sentry again.
+    // logger.captureException(err);
+  });
+
+  console.info('Register commands');
+
+  const commands = [
+    meme.register(bot),
+    time.register(bot),
+    help.register(bot),
+    quote.register(bot),
+    covid.register(bot, cache),
+    poll.register(cache, bot),
+    snap.register(bot),
+    blidingej.register(bot),
+    evalBot.register(bot),
+  ]
+    .filter((v) => Array.isArray(v))
+    .flat();
+
+  bot.telegram.setMyCommands(commands);
+
+  // TODO: Handle command not found
+
+  if (process.env.NODE_ENV === 'development') {
+    // We don't need this again in production
+    bot.launch();
+  } else {
+    const hookEndpoint = `${process.env.VERCEL_URL}${webhookEndpoint}`;
+    console.info(`Setting Telegram webhook to ${hookEndpoint}`);
+    bot.telegram.setWebhook(hookEndpoint);
+  }
+} catch (error) {
+  console.error(error);
 }
 
 export default bot.webhookCallback(webhookEndpoint);
