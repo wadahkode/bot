@@ -52,4 +52,4 @@ if (process.env.NODE_ENV === 'development') {
   bot.telegram.setWebhook(process.env.VERCEL_URL);
 }
 
-export default bot.webhookCallback('/');
+export default bot.webhookCallback('/api/webhook/telegram');

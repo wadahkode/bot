@@ -24,8 +24,8 @@
     }
   ],
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js",
+    "start": "node api/webhook/telegram.js",
+    "dev": "nodemon src/api/webhook/telegram.js",
     "lint": "eslint --fix --ignore-path .gitignore .",
     "format": "prettier --write --ignore-path .gitignore --ignore-path .prettierignore .",
     "prepare": "node prepare.cjs",
