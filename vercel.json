@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/webhook/telegram.js": {
+      "includeFiles": "src/**/*.hbs"
+    }
+  }
+}

@@ -13,8 +13,6 @@ import * as snap from '../../src/services/snap.js';
 import * as blidingej from '../../src/services/bliding-ej.js';
 import * as evalBot from '../../src/services/eval.js';
 
-console.info('Function start');
-
 const webhookEndpoint = '/api/webhook/telegram';
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
@@ -31,8 +29,6 @@ try {
     // We doesn't need sentry again.
     // logger.captureException(err);
   });
-
-  console.info('Register commands');
 
   const commands = [
     meme.register(bot),
