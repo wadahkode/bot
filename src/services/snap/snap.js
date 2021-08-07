@@ -1,5 +1,9 @@
 import { generateImage } from './utils.js';
 
+function mentionOrFullname(user) {
+  return user.username ? `@${user.username}` : `${user.first_name} ${user.from.last_name}`;
+}
+
 /**
  * Send daily quote.
  * @param {import('telegraf').Context} context
@@ -22,9 +26,9 @@ async function snap(context) {
         source: await generateImage(code),
       },
       {
-        caption: replyMessage.from.username
-          ? `@${replyMessage.from.username}`
-          : `${replyMessage.from.first_name} ${replyMessage.from.last_name}`,
+        caption: `From ${mentionOrFullname(replyMessage.from)}${
+          isOwner ? '' : `, Snapped by ${mentionOrFullname(context.message.from)}.`
+        }`,
         reply_to_message_id: !isOwner && replyMessage.message_id,
       },
     );
