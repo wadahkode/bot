@@ -4,7 +4,7 @@ import { Telegraf } from 'telegraf';
 import dotenv from 'dotenv';
 import redis from 'redis';
 
-import logger from '../../src/utlis/logger.js';
+// import logger from '../../src/utlis/logger.js';
 import * as poll from '../../src/services/poll.js';
 import * as meme from '../../src/services/meme.js';
 import * as time from '../../src/services/time.js';
@@ -24,7 +24,11 @@ const cache = redis.createClient(String(process.env.REDIS_URL));
 // Handle bot error globally
 // Register it first before register any other commands
 bot.catch((err) => {
-  logger.captureException(err);
+  // TODO: Format the error
+  console.error(err);
+
+  // We doesn't need sentry again.
+  // logger.captureException(err);
 });
 
 const commands = [
@@ -45,11 +49,13 @@ bot.telegram.setMyCommands(commands);
 
 // TODO: Handle command not found
 
+const webhookEndpoint = '/api/webhook/telegram';
+
 if (process.env.NODE_ENV === 'development') {
   // We don't need this again in production
   bot.launch();
 } else {
-  bot.telegram.setWebhook(process.env.VERCEL_URL);
+  bot.telegram.setWebhook(`${process.env.VERCEL_URL}${webhookEndpoint}`);
 }
 
-export default bot.webhookCallback('/api/webhook/telegram');
+export default bot.webhookCallback(webhookEndpoint);
